@@ -43,22 +43,34 @@ header h1 {
 }
 
 nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: flex;
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
-    padding: 1.5rem 1.5rem 2rem;
+    padding: 1rem 1.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(10px);
 }
 
 nav a {
     color: var(--text);
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
-nav a:hover {
+nav a:hover,
+nav a.active {
     color: var(--accent);
+    transform: translateY(-1px);
+}
+
+nav a.active {
+    text-decoration: underline;
 }
 
 main {
@@ -135,6 +147,23 @@ button, input, textarea, select {
 
 .nav a:hover {
     color: var(--text);
+}
+
+.nav a.active {
+    color: var(--accent);
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+}
+
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text);
+    padding: 8px;
 }
 
 .hero {
@@ -272,6 +301,25 @@ button, input, textarea, select {
     .nav {
         width: 100%;
         justify-content: space-between;
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        padding: 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        z-index: 9;
+    }
+
+    .nav.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
     }
 
     .hero {
