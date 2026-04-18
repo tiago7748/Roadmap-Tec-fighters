@@ -1,18 +1,17 @@
-// Dynamic Navigation
+// Smooth scroll and update active navigation
 document.addEventListener('DOMContentLoaded', () => {
-    const nav = document.getElementById('main-nav');
+    const navLinks = document.querySelectorAll('#main-nav a');
     const sections = document.querySelectorAll('main section[id]');
     
-    // Populate navigation from sections
-    sections.forEach(section => {
-        const link = document.createElement('a');
-        link.href = `#${section.id}`;
-        link.textContent = section.querySelector('h2')?.textContent || section.id;
-        link.onclick = (e) => {
+    // Handle smooth scroll on nav link clicks
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
-            smoothScroll(section);
-        };
-        nav.appendChild(link);
+            const section = document.querySelector(link.getAttribute('href'));
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     });
     
     // Update active link on scroll
@@ -20,29 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveNav(); // Initial call
 });
 
-// Smooth scroll to section
-function smoothScroll(element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    updateActiveNav();
-}
-
-// Update active navigation link
+// Update active navigation link based on scroll position
 function updateActiveNav() {
-    const sections = document.querySelectorAll('main section[id]');
     const navLinks = document.querySelectorAll('#main-nav a');
+    const sections = document.querySelectorAll('main section[id]');
     
     let currentSection = '';
     
     sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        
-        if (window.scrollY >= sectionTop - 200) {
+        if (window.scrollY >= section.offsetTop - 200) {
             currentSection = section.id;
         }
     });
     
-    // Update active states
     navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${currentSection}`) {
@@ -50,24 +39,3 @@ function updateActiveNav() {
         }
     });
 }
-
-// Mobile menu toggle (optional: add hamburger menu on small screens)
-document.addEventListener('DOMContentLoaded', () => {
-    const nav = document.getElementById('main-nav');
-    
-    // Create hamburger button for mobile
-    const hamburger = document.createElement('button');
-    hamburger.className = 'hamburger';
-    hamburger.setAttribute('aria-label', 'Toggle menu');
-    hamburger.setAttribute('aria-expanded', 'false');
-    hamburger.innerHTML = '☰';
-    
-    // Toggle menu on mobile
-    if (window.innerWidth <= 650) {
-        nav.parentElement.insertBefore(hamburger, nav);
-        hamburger.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            hamburger.setAttribute('aria-expanded', nav.classList.contains('active'));
-        });
-    }
-});
